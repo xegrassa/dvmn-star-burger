@@ -136,6 +136,9 @@ class OrderItem(models.Model):
         verbose_name="товар",
     )
     quantity = models.PositiveSmallIntegerField("Количество", default=0)
+    fix_price = models.DecimalField(
+        "Фиксированная цена", max_digits=8, decimal_places=2, validators=[MinValueValidator(0)]
+    )
 
     class Meta:
         verbose_name = "Элемент заказа"

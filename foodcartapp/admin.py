@@ -107,9 +107,9 @@ class OrderItemInline(admin.TabularInline):
 class OrderAdmin(admin.ModelAdmin):
     fields = [
         "address",
-        "first_name",
-        "last_name",
-        "contact_phone",
+        "firstname",
+        "lastname",
+        "phonenumber",
     ]
 
     inlines = [OrderItemInline]
