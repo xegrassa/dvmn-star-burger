@@ -1,7 +1,10 @@
 from django.contrib import admin
-from django.shortcuts import reverse
+from django.http import HttpResponseBadRequest
+from django.shortcuts import redirect, reverse
 from django.templatetags.static import static
+from django.utils.encoding import iri_to_uri
 from django.utils.html import format_html
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from .models import Order, OrderItem, Product, Restaurant, RestaurantMenuItem
 
@@ -113,3 +116,15 @@ class OrderAdmin(admin.ModelAdmin):
     ]
 
     inlines = [OrderItemInline]
+
+    def response_post_save_change(self, request, obj):
+
+        if not url_has_allowed_host_and_scheme(request.GET['next'], None):
+            return HttpResponseBadRequest("Bad Request. next argument")
+
+        if "next" in request.GET:
+            url = iri_to_uri(request.GET['next'])
+            return redirect(url)
+        else:
+            res = super().response_post_save_change(request, obj)
+            return res
