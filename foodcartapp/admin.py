@@ -113,17 +113,18 @@ class OrderAdmin(admin.ModelAdmin):
         "firstname",
         "lastname",
         "phonenumber",
+        "status",
     ]
 
     inlines = [OrderItemInline]
 
     def response_post_save_change(self, request, obj):
 
-        if not url_has_allowed_host_and_scheme(request.GET['next'], None):
+        if not url_has_allowed_host_and_scheme(request.GET["next"], None):
             return HttpResponseBadRequest("Bad Request. next argument")
 
         if "next" in request.GET:
-            url = iri_to_uri(request.GET['next'])
+            url = iri_to_uri(request.GET["next"])
             return redirect(url)
         else:
             res = super().response_post_save_change(request, obj)

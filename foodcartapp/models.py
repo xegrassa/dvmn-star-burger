@@ -1,6 +1,7 @@
 from django.core.validators import MinValueValidator
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from .enums import OrderStatus
 
 
 class Restaurant(models.Model):
@@ -112,6 +113,7 @@ class Order(models.Model):
         max_length=255,
     )
     phonenumber = PhoneNumberField("Мобильный номер")
+    status = models.CharField(choices=OrderStatus.choices, default=OrderStatus.NEW, max_length=255, db_index=True)
 
     class Meta:
         verbose_name = "Заказ"
@@ -122,7 +124,6 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-
     order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
