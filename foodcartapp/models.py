@@ -54,16 +54,8 @@ class Product(models.Model):
     )
     price = models.DecimalField("цена", max_digits=8, decimal_places=2, validators=[MinValueValidator(0)])
     image = models.ImageField("картинка")
-    special_status = models.BooleanField(
-        "спец.предложение",
-        default=False,
-        db_index=True,
-    )
-    description = models.TextField(
-        "описание",
-        max_length=200,
-        blank=True,
-    )
+    special_status = models.BooleanField("спец.предложение", default=False, db_index=True)
+    description = models.TextField("описание", max_length=200, blank=True)
 
     objects = ProductQuerySet.as_manager()
 
@@ -100,20 +92,12 @@ class RestaurantMenuItem(models.Model):
 
 
 class Order(models.Model):
-    firstname = models.CharField(
-        "Имя",
-        max_length=255,
-    )
-    lastname = models.CharField(
-        "Фамилия",
-        max_length=255,
-    )
-    address = models.CharField(
-        "Адрес",
-        max_length=255,
-    )
+    firstname = models.CharField("Имя", max_length=255)
+    lastname = models.CharField("Фамилия", max_length=255)
+    address = models.CharField("Адрес", max_length=255)
     phonenumber = PhoneNumberField("Мобильный номер")
     status = models.CharField(choices=OrderStatus.choices, default=OrderStatus.NEW, max_length=255, db_index=True)
+    comment = models.TextField(blank=True)
 
     class Meta:
         verbose_name = "Заказ"
