@@ -1,7 +1,7 @@
 from django.core.validators import MinValueValidator
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
-from .enums import OrderStatus
+from .enums import OrderStatus, PaymentType
 from django.utils import timezone
 
 
@@ -97,8 +97,14 @@ class Order(models.Model):
     lastname = models.CharField("Фамилия", max_length=255)
     address = models.CharField("Адрес", max_length=255)
     phonenumber = PhoneNumberField("Мобильный номер")
-    status = models.CharField(choices=OrderStatus.choices, default=OrderStatus.NEW, max_length=255, db_index=True)
-    comment = models.TextField(blank=True)
+    comment = models.TextField("Комментарий", blank=True)
+
+    status = models.CharField(
+        "Статус заказа", choices=OrderStatus.choices, default=OrderStatus.NEW, max_length=255, db_index=True
+    )
+    payment_type = models.CharField(
+        "Тип оплаты", choices=PaymentType.choices, default=PaymentType.CASH, max_length=255, db_index=True
+    )
 
     registrated_at = models.DateTimeField("Дата создания заказа", default=timezone.now, db_index=True)
     called_at = models.DateTimeField("Время звонка с клиентом", default=None, blank=True, null=True, db_index=True)
