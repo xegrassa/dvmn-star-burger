@@ -2,6 +2,7 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from .enums import OrderStatus
+from django.utils import timezone
 
 
 class Restaurant(models.Model):
@@ -98,6 +99,12 @@ class Order(models.Model):
     phonenumber = PhoneNumberField("Мобильный номер")
     status = models.CharField(choices=OrderStatus.choices, default=OrderStatus.NEW, max_length=255, db_index=True)
     comment = models.TextField(blank=True)
+
+    registrated_at = models.DateTimeField("Дата создания заказа", default=timezone.now, db_index=True)
+    called_at = models.DateTimeField("Время звонка с клиентом", default=None, blank=True, null=True, db_index=True)
+    delivered_at = models.DateTimeField(
+        "Время когда доставлен заказ", default=None, blank=True, null=True, db_index=True
+    )
 
     class Meta:
         verbose_name = "Заказ"
